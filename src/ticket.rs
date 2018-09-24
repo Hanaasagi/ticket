@@ -6,22 +6,24 @@ use std::process;
 use std::io::prelude::*;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-//   - 4-byte value representing the seconds since the Unix epoch,
-//   - 3-byte machine identifier,
-//   - 2-byte process id, and
-//   - 3-byte counter, starting with a random value.
+///   - 4-byte value representing the seconds since the Unix epoch,
+///   - 3-byte machine identifier,
+///   - 2-byte process id, and
+///   - 3-byte counter, starting with a random value.
 
 
+#[allow(dead_code)]
 const ENCODED_LEN: usize = 20;  // string encoded length
 const RAW_LEN: usize = 12; // binary raw length
 const ENCODING: &str =  "0123456789abcdefghijklmnopqrstuv";
 
 type ID = [u8; RAW_LEN];
 
-struct Ticket {
+pub struct Ticket {
     object_id_counter: AtomicUsize,
     machine_id: String,
     pid: u32,
+    #[allow(dead_code)]
     dec: [u8; 256]
 }
 
@@ -46,29 +48,28 @@ impl Ticket {
     }
 
     pub fn gen(&mut self) -> ID {
-        let mut id: ID;
         return self.get_with_time(time::now_utc());
     }
 
-    pub fn get_with_time(&mut self, t: time::Tm) -> ID {
+    fn get_with_time(&mut self, t: time::Tm) -> ID {
         let sec = t.to_timespec().sec as u32;
         let digest = md5::compute(self.machine_id.as_bytes());
         let count = self.object_id_counter.fetch_add(1, Ordering::SeqCst) as u32;
 
         let mut id: ID = [0; 12];
+        id[0]  = ((sec >> 24)   & 0xff) as u8;
+        id[1]  = ((sec >> 16)   & 0xff) as u8;
+        id[2]  = ((sec >> 8)    & 0xff) as u8;
+        id[3]  = (sec           & 0xff) as u8;
+        id[4]  = digest[0];
+        id[5]  = digest[1];
+        id[6]  = digest[2];
+        id[7]  = (self.pid >> 8 & 0xff) as u8;
+        id[8]  = (self.pid      & 0xff) as u8;
+        id[9]  = (count >> 16   & 0xff) as u8;
+        id[10] = (count >> 8    & 0xff) as u8;
+        id[11] = (count         & 0xff) as u8;
 
-        id[0] = ((sec >> 24) & 0xff) as u8;
-        id[1] = ((sec >> 16) & 0xff) as u8;
-        id[2] = ((sec >> 8) & 0xff) as u8;
-        id[3]= (sec & 0xff) as u8;
-        id[4] = digest[0];
-        id[5] = digest[1];
-        id[6] = digest[2];
-        id[7] = (self.pid >> 8 & 0xff) as u8;
-        id[8] = (self.pid & 0xff) as u8;
-        id[9] = (count >> 16 & 0xff) as u8;
-        id[10] = (count >> 8 & 0xff) as u8;
-        id[11] = (count & 0xff) as u8;
         return id;
     }
 }
