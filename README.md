@@ -1,8 +1,8 @@
 # Ticket
 
-### About Ticket
-
 ![](https://img.shields.io/badge/version-beta-EB6EA5.svg)
+
+### About Ticket
 
 Unique ID Generator
 
