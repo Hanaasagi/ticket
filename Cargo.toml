@@ -1,0 +1,9 @@
+[package]
+name = "ticket"
+version = "0.1.0"
+authors = ["Hanaasagi <ambiguous404@gmail.com>"]
+
+[dependencies]
+time = "0.1.40"
+rand = "0.5.5"
+md5 = "0.4"
