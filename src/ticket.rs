@@ -85,7 +85,7 @@ impl Ticket {
 
 fn get_machine_id() -> String {
     // only work in linux
-    let file_path = "/sys/class/dmi/id/product_uuid";
+    let file_path = "/var/lib/dbus/machine-id";  // fix /sys/class/dmi/id/product_uuid permission denied
     let mut f = File::open(file_path)
         .unwrap_or_else(|_| panic!("{} not found", file_path));
 
