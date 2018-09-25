@@ -3,9 +3,23 @@
 [![Build Status](https://travis-ci.org/Hanaasagi/ticket.svg?branch=master)](https://travis-ci.org/Hanaasagi/ticket)
 ![](https://img.shields.io/badge/version-beta-EB6EA5.svg)
 
+```
+   _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+  ）                                （
+---                                  ---
+  9   _____ ___ ___ _  _____ _____   7
+  6  |_   _|_ _/ __| |/ / __|_   _|  1
+  3    | |  | | (__| ' <| _|  | |    6
+  8    |_| |___\___|_|\_\___| |_|    5
+  0                                  2
+---                                  ---
+  )_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _（
+
+```
+
 ### About Ticket
 
-Unique ID Generator
+Ticket is an Unique-ID-Generator.
 
 The ID generated from Ticket only occupies 12 bytes.
 
@@ -35,7 +49,7 @@ fn main() {
     // create a `Ticket` to generate ticket number.
     let id: [u8; 12] = Ticket::new().gen();
     println!("{:?}", id);  // [91, 168, 206, 39, 123, 235, 192, 35, 15, 80, 249, 118]
-    
+
     // encode and dedode
     println!("{}", encode(id));  // "bekcs9rrtf0263qgv5r0"
     assert_eq!(decode(encode(id)), id)
