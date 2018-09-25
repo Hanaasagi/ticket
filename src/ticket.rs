@@ -28,6 +28,7 @@ lazy_static! {
 
 type ID = [u8; RAW_LEN];
 
+#[derive(Default)]
 pub struct Ticket {
     object_id_counter: AtomicUsize,
     machine_id: String,
@@ -40,16 +41,16 @@ impl Ticket {
         let object_id_counter = AtomicUsize::new(rand::random::<usize>());
         let machine_id = get_machine_id();
         let pid = process::id();
-        return Ticket {
-            object_id_counter: object_id_counter,
-            machine_id: machine_id,
-            pid: pid,
+        Ticket {
+            object_id_counter,
+            machine_id,
+            pid,
         }
 
     }
 
     pub fn gen(&mut self) -> ID {
-        return self.get_with_time(time::now_utc());
+        self.get_with_time(time::now_utc())
     }
 
     fn get_with_time(&mut self, t: time::Tm) -> ID {
@@ -71,7 +72,7 @@ impl Ticket {
         id[10] = (count >> 8    & 0xFF) as u8;
         id[11] = (count         & 0xFF) as u8;
 
-        return id;
+        id
     }
 }
 
@@ -80,13 +81,13 @@ fn get_machine_id() -> String {
     // only work in linux
     let file_path = "/sys/class/dmi/id/product_uuid";
     let mut f = File::open(file_path)
-        .expect(&format!("{} not found", file_path));
+        .unwrap_or_else(|_| panic!("{} not found", file_path));
 
     let mut contents = String::new();
     f.read_to_string(&mut contents)
-        .expect(&format!("can't read {}", file_path));
+        .unwrap_or_else(|_| panic!("can't read {}", file_path));
     // f will automatically closed when they go out of scope.
-    return contents;
+    contents
 }
 
 
@@ -114,7 +115,7 @@ pub fn encode(id: ID) -> String {
 	result[18] = encoding[((id[11] >> 1) & 0x1F) as usize];
     result[19] = encoding[((id[11] << 4) & 0x1F) as usize];
 
-    return str::from_utf8(&result).unwrap().to_string();
+    str::from_utf8(&result).unwrap().to_string()
 }
 
 #[test]
@@ -124,7 +125,7 @@ fn test_encode() {
 }
 
 
-pub fn decode(s: String) -> ID {
+pub fn decode(s: &str) -> ID {
     let dec = *DECODING;
     let s = s.as_bytes();
     let mut id: ID = [0u8; RAW_LEN];
@@ -140,19 +141,19 @@ pub fn decode(s: String) -> ID {
     id[9]  = dec[s[14] as usize] << 5 | dec[s[15] as usize];
     id[10] = dec[s[16] as usize] << 3 | dec[s[17] as usize] >> 2;
     id[11] = dec[s[17] as usize] << 6 | dec[s[18] as usize] << 1 | dec[s[19] as usize] >> 4;
-    return id;
+    id
 }
 
 #[test]
 fn test_decode() {
     let id: ID = [91, 168, 192, 19, 123, 235, 192, 25, 161, 153, 245, 249];
-    assert_eq!(decode("bekc04rrtf01j8cpunsg".to_string()), id);
+    assert_eq!(decode(&"bekc04rrtf01j8cpunsg".to_string()), id);
 }
 
 #[test]
 fn test_encode_and_decode() {
     for _ in 0..100 {
         let id = Ticket::new().gen();
-        assert_eq!(decode(encode(id)), id);
+        assert_eq!(decode(&encode(id)), id);
     }
 }
