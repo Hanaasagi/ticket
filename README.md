@@ -31,6 +31,8 @@ The ID generated from Ticket only occupies 12 bytes.
 
 ### Usage
 
+#### As lib:
+
 Put this in your `Cargo.toml`:
 
 ```Toml
@@ -55,6 +57,14 @@ fn main() {
     assert_eq!(decode(encode(id)), id)
 }
 
+```
+
+#### As binary:
+
+```Bash
+$ cargo install --git https://github.com/Hanaasagi/ticket
+$ ticket-id
+beks28brtf03r1k35tog
 ```
 
 ### License
