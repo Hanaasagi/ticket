@@ -54,7 +54,7 @@ fn main() {
 
     // encode and dedode
     println!("{}", encode(id));  // "bekcs9rrtf0263qgv5r0"
-    assert_eq!(decode(encode(id)), id)
+    assert_eq!(decode(&encode(id)), id)
 }
 
 ```
