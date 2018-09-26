@@ -1,4 +1,5 @@
 mod ticket;
+mod id;
 
 extern crate rand;
 extern crate time;
@@ -11,3 +12,9 @@ pub use ticket::{
     encode,
     decode
 };
+
+pub use id:: {
+    ID
+};
+
+const RAW_LEN: usize = 12; // binary raw length
