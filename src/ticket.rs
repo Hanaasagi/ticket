@@ -24,22 +24,29 @@ lazy_static! {
         }
         dec
     };
+
+    static ref MACHINE_ID: String = get_machine_id();
 }
 
 type ID = [u8; RAW_LEN];
 
-#[derive(Default)]
 pub struct Ticket {
     object_id_counter: AtomicUsize,
-    machine_id: String,
+    machine_id: md5::Digest,
     pid: u32,
+}
+
+impl Default for Ticket {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl Ticket {
 
-    pub fn new() -> Ticket {
+    pub fn new() -> Self {
         let object_id_counter = AtomicUsize::new(rand::random::<usize>());
-        let machine_id = get_machine_id();
+        let machine_id = md5::compute(MACHINE_ID.as_bytes());
         let pid = process::id();
         Ticket {
             object_id_counter,
@@ -55,7 +62,6 @@ impl Ticket {
 
     fn get_with_time(&mut self, t: time::Tm) -> ID {
         let sec = t.to_timespec().sec as u32;
-        let digest = md5::compute(self.machine_id.as_bytes());
         let count = self.object_id_counter.fetch_add(1, Ordering::SeqCst) as u32;
 
         let mut id: ID = [0; 12];
@@ -63,9 +69,9 @@ impl Ticket {
         id[1]  = ((sec >> 16)   & 0xFF) as u8;
         id[2]  = ((sec >> 8)    & 0xFF) as u8;
         id[3]  = (sec           & 0xFF) as u8;
-        id[4]  = digest[0];
-        id[5]  = digest[1];
-        id[6]  = digest[2];
+        id[4]  = self.machine_id[0];
+        id[5]  = self.machine_id[1];
+        id[6]  = self.machine_id[2];
         id[7]  = (self.pid >> 8 & 0xFF) as u8;
         id[8]  = (self.pid      & 0xFF) as u8;
         id[9]  = (count >> 16   & 0xFF) as u8;
@@ -79,7 +85,7 @@ impl Ticket {
 
 fn get_machine_id() -> String {
     // only work in linux
-    let file_path = "/sys/class/dmi/id/product_uuid";
+    let file_path = "/var/lib/dbus/machine-id";  // fix /sys/class/dmi/id/product_uuid permission denied
     let mut f = File::open(file_path)
         .unwrap_or_else(|_| panic!("{} not found", file_path));
 
