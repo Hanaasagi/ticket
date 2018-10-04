@@ -13,7 +13,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 ///   - 3-byte counter, starting with a random value.
 
 const ENCODED_LEN: usize = 20;  // string encoded length
-const ENCODING: &str =  "0123456789abcdefghijklmnopqrstuv";
+const ENCODING: &str = "0123456789abcdefghijklmnopqrstuv";
 
 lazy_static! {
     static ref DECODING: [u8; 256] = {
