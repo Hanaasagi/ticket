@@ -4,6 +4,7 @@ mod id;
 extern crate rand;
 extern crate time;
 extern crate md5;
+extern crate machine_uid;
 #[macro_use]
 extern crate lazy_static;
 

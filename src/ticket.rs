@@ -1,11 +1,10 @@
 use rand;
 use time;
 use md5;
+use machine_uid;
 use id::{ID};
 use std::str;
-use std::fs::File;
 use std::process;
-use std::io::prelude::*;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 ///   - 4-byte value representing the seconds since the Unix epoch,
@@ -25,7 +24,8 @@ lazy_static! {
         dec
     };
 
-    static ref MACHINE_ID: String = get_machine_id();
+    static ref MACHINE_ID: String = machine_uid::get()
+        .unwrap_or_else(|_| panic!("could not get machine id."));
 }
 
 
@@ -79,20 +79,6 @@ impl Ticket {
 
         ID::new(raw)
     }
-}
-
-
-fn get_machine_id() -> String {
-    // only work in linux
-    let file_path = "/var/lib/dbus/machine-id";  // fix /sys/class/dmi/id/product_uuid permission denied
-    let mut f = File::open(file_path)
-        .unwrap_or_else(|_| panic!("{} not found", file_path));
-
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)
-        .unwrap_or_else(|_| panic!("can't read {}", file_path));
-    // f will automatically closed when they go out of scope.
-    contents
 }
 
 
