@@ -1,7 +1,8 @@
 # Ticket
 
+Simple Unique-ID-Generator inspired by [rs/xid](https://github.com/rs/xid).
+
 [![Build Status](https://travis-ci.org/Hanaasagi/ticket.svg?branch=master)](https://travis-ci.org/Hanaasagi/ticket)
-![](https://img.shields.io/badge/version-beta-EB6EA5.svg)
 
 ```
    _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
@@ -19,15 +20,12 @@
 
 ### About Ticket
 
-Ticket is an Unique-ID-Generator.
-
 The ID generated from Ticket only occupies 12 bytes.
 
 - 4-byte from unix timestamp,
 - 3-byte from machine id(`/sys/class/dmi/id/product_uuid`),
 - 2-byte from current process id, and
 - 3-byte counter which starting with a random value.
-
 
 ### Usage
 
@@ -43,7 +41,6 @@ ticket = { git = "https://github.com/Hanaasagi/ticket" }
 Use it like following
 
 ```Rust
-
 extern crate ticket;
 use ticket::{Ticket, encode, decode};
 
@@ -56,7 +53,6 @@ fn main() {
     println!("{}", encode(id));  // "bekcs9rrtf0263qgv5r0"
     assert_eq!(decode(&encode(id)), id)
 }
-
 ```
 
 #### As binary:
