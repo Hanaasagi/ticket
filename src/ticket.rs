@@ -7,15 +7,13 @@ use std::str;
 use std::process;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-///   - 4-byte value representing the seconds since the Unix epoch,
-///   - 3-byte machine identifier,
-///   - 2-byte process id, and
-///   - 3-byte counter, starting with a random value.
-
-const ENCODED_LEN: usize = 20;  // string encoded length
+/// string id length
+const ENCODED_LEN: usize = 20;
+/// encoding map
 const ENCODING: &str = "0123456789abcdefghijklmnopqrstuv";
 
 lazy_static! {
+    /// decoding map
     static ref DECODING: [u8; 256] = {
         let mut dec = [0xFFu8; 256];
         for (index, &chr) in ENCODING.as_bytes().iter().enumerate() {
@@ -24,30 +22,32 @@ lazy_static! {
         dec
     };
 
+    /// current machine id
     static ref MACHINE_ID: String = machine_uid::get()
         .unwrap_or_else(|_| panic!("could not get machine id."));
 }
 
 
-pub struct Ticket {
+/// ticket id generator
+pub struct Ticketing {
     object_id_counter: AtomicUsize,
     machine_id: md5::Digest,
     pid: u32,
 }
 
-impl Default for Ticket {
+impl Default for Ticketing {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl Ticket {
+impl Ticketing {
 
     pub fn new() -> Self {
         let object_id_counter = AtomicUsize::new(rand::random::<usize>());
         let machine_id = md5::compute(MACHINE_ID.as_bytes());
         let pid = process::id();
-        Ticket {
+        Ticketing {
             object_id_counter,
             machine_id,
             pid,
@@ -55,6 +55,7 @@ impl Ticket {
 
     }
 
+    /// generate a new id
     pub fn gen(&mut self) -> ID {
         self.get_with_time(time::now_utc())
     }
@@ -82,6 +83,7 @@ impl Ticket {
 }
 
 
+/// base32 encode
 pub fn encode(id: ID) -> String {
     let encoding = ENCODING.as_bytes();
     let raw = id.as_bytes();
@@ -117,6 +119,7 @@ fn test_encode() {
 }
 
 
+/// base32 decode
 pub fn decode(s: &str) -> ID {
     let dec = *DECODING;
     let s = s.as_bytes();
@@ -146,7 +149,7 @@ fn test_decode() {
 #[test]
 fn test_encode_and_decode() {
     for _ in 0..100 {
-        let id = Ticket::new().gen();
+        let id = Ticketing::new().gen();
         assert_eq!(decode(&encode(id)), id);
     }
 }

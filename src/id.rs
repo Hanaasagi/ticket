@@ -1,3 +1,4 @@
+/// ticket id representation
 #[derive(Debug, Copy, Clone, Default)]
 pub struct ID {
     raw: [u8; ::RAW_LEN]
@@ -17,6 +18,7 @@ impl ID {
         }
     }
 
+    /// covert ID to u8 array
     pub fn as_bytes(self) -> [u8; ::RAW_LEN] {
         self.raw
     }

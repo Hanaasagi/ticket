@@ -1,7 +1,7 @@
 extern crate ticket;
-use ticket::{Ticket, encode};
+use ticket::{Ticketing, encode};
 
 fn main() {
-    let id = Ticket::new().gen();
+    let id = Ticketing::new().gen();
     println!("{}", encode(id));
 }

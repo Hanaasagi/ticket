@@ -42,11 +42,11 @@ Use it like following
 
 ```Rust
 extern crate ticket;
-use ticket::{Ticket, encode, decode};
+use ticket::{Ticketing, encode, decode};
 
 fn main() {
-    // create a `Ticket` to generate ticket number.
-    let id: [u8; 12] = Ticket::new().gen();
+    // create a `Ticketing` to generate ticket number.
+    let id: [u8; 12] = Ticketing::new().gen();
     println!("{:?}", id);  // [91, 168, 206, 39, 123, 235, 192, 35, 15, 80, 249, 118]
 
     // encode and dedode

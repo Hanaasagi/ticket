@@ -1,12 +1,12 @@
 extern crate ticket;
 
 use std::thread;
-use ticket::Ticket;
+use ticket::Ticketing;
 
 
 #[test]
 fn test_unique() {
-    let mut generator = Ticket::new();
+    let mut generator = Ticketing::new();
     let id_1 = generator.gen();
     let id_2 = generator.gen();
     assert_ne!(id_1, id_2);
@@ -15,8 +15,8 @@ fn test_unique() {
 
 #[test]
 fn test_id_component() {
-    let id_1 = Ticket::new().gen().as_bytes();
-    let id_2 = Ticket::new().gen().as_bytes();
+    let id_1 = Ticketing::new().gen().as_bytes();
+    let id_2 = Ticketing::new().gen().as_bytes();
 
     // machine id
     assert_eq!(id_1[4 .. 7], id_2[4 .. 7]);
@@ -27,7 +27,7 @@ fn test_id_component() {
 
 #[test]
 fn test_thread_safe() {
-    let mut generator = Ticket::new();
+    let mut generator = Ticketing::new();
     let id_1 = generator.gen();
     let id_2 = thread::spawn(move || {
         generator.gen()
