@@ -1,7 +1,7 @@
 extern crate ticket;
 
 use std::thread;
-use ticket::Ticketing;
+use ticket::{Ticketing, encode, decode, ID};
 
 
 #[test]
@@ -36,4 +36,27 @@ fn test_thread_safe() {
     assert_ne!(id_1, id_2);
     // only id counter will be different.
     assert_eq!(id_1.as_bytes()[0 .. 9], id_2.as_bytes()[0 .. 9]);
+}
+
+
+#[test]
+fn test_encode() {
+    let id: ID = ID::new([91, 168, 192, 19, 123, 235, 192, 25, 161, 153, 245, 249]);
+    assert_eq!(encode(id), "bekc04rrtf01j8cpunsg");
+}
+
+
+#[test]
+fn test_decode() {
+    let id: ID = ID::new([91, 168, 192, 19, 123, 235, 192, 25, 161, 153, 245, 249]);
+    assert_eq!(decode(&"bekc04rrtf01j8cpunsg".to_string()), id);
+}
+
+
+#[test]
+fn test_encode_and_decode() {
+    for _ in 0..100 {
+        let id = Ticketing::new().gen();
+        assert_eq!(decode(&encode(id)), id);
+    }
 }

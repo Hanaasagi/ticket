@@ -36,14 +36,29 @@ extern crate machine_uid;
 extern crate lazy_static;
 
 pub use ticket::{
-    Ticketing,
+    Ticketing
+};
+
+pub use id:: {
+    ID,
     encode,
     decode
 };
 
-pub use id:: {
-    ID
-};
-
 /// raw id length
 const RAW_LEN: usize = 12;
+/// string id length
+const ENCODED_LEN: usize = 20;
+/// encoding map
+const ENCODING: &str = "0123456789abcdefghijklmnopqrstuv";
+
+lazy_static! {
+    /// decoding map
+    static ref DECODING: [u8; 256] = {
+        let mut dec = [0xFFu8; 256];
+        for (index, &chr) in ENCODING.as_bytes().iter().enumerate() {
+            dec[chr as usize] = index as u8;
+        }
+        dec
+    };
+}
