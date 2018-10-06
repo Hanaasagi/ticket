@@ -5,21 +5,21 @@ extern crate ticket;
 use bencher::Bencher;
 
 fn gen_bench(b: &mut Bencher) {
-    let mut t = ticket::Ticket::new();
+    let mut t = ticket::Ticketing::new();
     b.iter(|| {
         t.gen();
     })
 }
 
 fn encode_bench(b: &mut Bencher) {
-    let id = ticket::Ticket::new().gen();
+    let id = ticket::Ticketing::new().gen();
     b.iter(|| {
         ticket::encode(id);
     });
 }
 
 fn decode_bench(b: &mut Bencher) {
-    let id_s = ticket::encode(ticket::Ticket::new().gen());
+    let id_s = ticket::encode(ticket::Ticketing::new().gen());
     b.iter(|| {
         ticket::decode(&id_s);
     });

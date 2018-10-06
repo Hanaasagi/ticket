@@ -6,10 +6,6 @@ authors = ["Hanaasagi <ambiguous404@gmail.com>"]
 [lib]
 name = "ticket"
 
-[[bin]]
-name = "ticket-id"
-path = "src/bin.rs"
-
 [[bench]]
 name = "benchmark"
 harness = false

@@ -57,11 +57,7 @@ impl Ticketing {
 
     /// generate a new id
     pub fn gen(&mut self) -> ID {
-        self.get_with_time(time::now_utc())
-    }
-
-    fn get_with_time(&mut self, t: time::Tm) -> ID {
-        let sec = t.to_timespec().sec as u32;
+        let sec = time::now_utc().to_timespec().sec as u32;
         let count = self.object_id_counter.fetch_add(1, Ordering::SeqCst) as u32;
 
         let mut raw = [0u8; ::RAW_LEN];

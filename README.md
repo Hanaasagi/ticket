@@ -1,6 +1,6 @@
 # Ticket
 
-Simple Unique-ID-Generator inspired by [rs/xid](https://github.com/rs/xid).
+Unique-ID-Generator inspired by [rs/xid](https://github.com/rs/xid).
 
 [![Build Status](https://travis-ci.org/Hanaasagi/ticket.svg?branch=master)](https://travis-ci.org/Hanaasagi/ticket)
 
@@ -23,13 +23,11 @@ Simple Unique-ID-Generator inspired by [rs/xid](https://github.com/rs/xid).
 The ID generated from Ticket only occupies 12 bytes.
 
 - 4-byte from unix timestamp,
-- 3-byte from machine id(`/sys/class/dmi/id/product_uuid`),
+- 3-byte from machine id,
 - 2-byte from current process id, and
 - 3-byte counter which starting with a random value.
 
 ### Usage
-
-#### As lib:
 
 Put this in your `Cargo.toml`:
 
@@ -53,14 +51,6 @@ fn main() {
     println!("{}", encode(id));  // "bekcs9rrtf0263qgv5r0"
     assert_eq!(decode(&encode(id)), id)
 }
-```
-
-#### As binary:
-
-```Bash
-$ cargo install --git https://github.com/Hanaasagi/ticket
-$ ticket-id
-beks28brtf03r1k35tog
 ```
 
 ### License
