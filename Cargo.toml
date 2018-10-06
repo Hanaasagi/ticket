@@ -2,6 +2,11 @@
 name = "ticket"
 version = "0.1.0"
 authors = ["Hanaasagi <ambiguous404@gmail.com>"]
+license = "BSD-3-Clause"
+repository = "https://github.com/Hanaasagi/ticket"
+description = """
+generate unique id which occupies 12 bytes.
+"""
 
 [lib]
 name = "ticket"
