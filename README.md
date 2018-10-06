@@ -42,14 +42,19 @@ Use it like following
 extern crate ticket;
 use ticket::{Ticketing, encode, decode};
 
+
 fn main() {
     // create a `Ticketing` to generate ticket number.
-    let id: [u8; 12] = Ticketing::new().gen();
-    println!("{:?}", id);  // [91, 168, 206, 39, 123, 235, 192, 35, 15, 80, 249, 118]
+    let id = Ticketing::new().gen();
+
+    // using base32 encoding.
+    println!("{}", id);  // "bekcs9rrtf0263qgv5r0"
+
+    // as 12 bytes array.
+    println!("{:?}", id.as_bytes());  // [91, 168, 206, 39, 123, 235, 192, 35, 15, 80, 249, 118]
 
     // encode and dedode
-    println!("{}", encode(id));  // "bekcs9rrtf0263qgv5r0"
-    assert_eq!(decode(&encode(id)), id)
+    assert_eq!(decode(&encode(id)), id);
 }
 ```
 
