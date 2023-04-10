@@ -2,12 +2,12 @@
 
 Unique-ID-Generator inspired by [rs/xid](https://github.com/rs/xid).
 
-[![ticket on GitHub Action]][action-image]][action]
+[![ticket on GitHub Action][action-image]][action]
 [![ticket on crates.io][cratesio-image]][cratesio]
 [![ticket on docs.rs][docsrs-image]][docsrs]
 
-[action-image]: https://github.com/Hanaasagi/ticket/actions/workflows/rust.yml/badge.svg
-[action]: https://github.com/Hanaasagi/ticket/actions/workflows/rust.yml
+[action-image]: https://github.com/Hanaasagi/ticket/actions/workflows/ci.yaml/badge.svg
+[action]: https://github.com/Hanaasagi/ticket/actions/workflows/ci.yaml
 [cratesio-image]: https://img.shields.io/crates/v/ticket.svg
 [cratesio]: https://crates.io/crates/ticket
 [docsrs-image]: https://docs.rs/ticket/badge.svg
