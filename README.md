@@ -2,12 +2,12 @@
 
 Unique-ID-Generator inspired by [rs/xid](https://github.com/rs/xid).
 
-[![ticket on Travis CI][travis-image]][travis]
+[![ticket on GitHub Action]][action-image]][action]
 [![ticket on crates.io][cratesio-image]][cratesio]
 [![ticket on docs.rs][docsrs-image]][docsrs]
 
-[travis-image]: https://travis-ci.org/Hanaasagi/ticket.svg?branch=master
-[travis]: https://travis-ci.org/Hanaasagi/ticket
+[action-image]: https://github.com/Hanaasagi/ticket/actions/workflows/rust.yml/badge.svg
+[action]: https://github.com/Hanaasagi/ticket/actions/workflows/rust.yml
 [cratesio-image]: https://img.shields.io/crates/v/ticket.svg
 [cratesio]: https://crates.io/crates/ticket
 [docsrs-image]: https://docs.rs/ticket/badge.svg
@@ -68,4 +68,5 @@ fn main() {
 ```
 
 ### License
+
 [BSD 3-Clause License](https://github.com/Hanaasagi/ticket/blob/master/LICENSE) Copyright (c) 2018, Hanaasagi
