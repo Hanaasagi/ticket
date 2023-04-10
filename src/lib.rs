@@ -30,25 +30,19 @@
 //! ```
 //!
 
-mod ticket;
 mod id;
+mod ticket;
 
+extern crate machine_uid;
+extern crate md5;
 extern crate rand;
 extern crate time;
-extern crate md5;
-extern crate machine_uid;
 #[macro_use]
 extern crate lazy_static;
 
-pub use ticket::{
-    Ticketing
-};
+pub use self::ticket::Ticketing;
 
-pub use id:: {
-    ID,
-    encode,
-    decode
-};
+pub use id::{decode, encode, ID};
 
 /// raw id length
 const RAW_LEN: usize = 12;

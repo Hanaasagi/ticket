@@ -1,4 +1,5 @@
-use id::ID;
+use super::id::ID;
+use super::RAW_LEN;
 use machine_uid;
 use md5;
 use rand;
@@ -44,7 +45,7 @@ impl Ticketing {
         // wraps around on overflow
         let count = self.object_id_counter.fetch_add(1, Ordering::SeqCst) as u32;
 
-        let mut raw = [0u8; ::RAW_LEN];
+        let mut raw = [0u8; RAW_LEN];
         raw[0] = ((sec >> 24) & 0xFF) as u8;
         raw[1] = ((sec >> 16) & 0xFF) as u8;
         raw[2] = ((sec >> 8) & 0xFF) as u8;
